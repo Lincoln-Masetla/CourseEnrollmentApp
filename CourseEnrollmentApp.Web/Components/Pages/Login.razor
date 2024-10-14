@@ -1,0 +1,82 @@
+﻿@page "/login"
+@using CourseEnrollmentApp.Core.Interfaces.Repositories
+@using CourseEnrollmentApp.Web.Models
+@using CourseEnrollmentApp.Web.Services
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IStudentRepository _studentRepository
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h1 class="text-center">Log in</h1>
+        <EditForm Model="@loginDto" OnValidSubmit="LoginUser" FormName="LoginForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="@loginDto.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="Email" />
+                <label for="email">Email</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="@loginDto.Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Password" />
+                <label for="password">Password</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Log in</button>
+        </EditForm>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger mt-3">@errorMessage</div>
+        }
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public LoginDto loginDto { get; set; } = new LoginDto();
+
+    private string? errorMessage;
+
+    private async Task LoginUser()
+    {
+        if (loginDto == null || string.IsNullOrEmpty(loginDto.Email))
+        {
+            errorMessage = "Email is required.";
+            return;
+        }
+
+        var user = await _studentRepository.GetStudentByEmailAsync(loginDto.Email);
+        if (user == null || user.Password != loginDto.Password)
+        {
+            errorMessage = "Invalid email or password";
+            return;
+        }
+
+        if (user.Email == null)
+        {
+            errorMessage = "User email is invalid.";
+            return;
+        }
+
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var principal = new ClaimsPrincipal(identity);
+
+        // Notify the authentication state provider
+        var authStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+        await authStateProvider.MarkUserAsAuthenticated(principal);
+
+        // Redirect to avoid response already started issue
+        Navigation.NavigateTo("/");
+    }
+}

@@ -1,0 +1,16 @@
+﻿<div class="col-md-4 mb-3">
+    <div class="card h-100">
+        <div class="card-body">
+            <h5 class="card-title">@Course.Name</h5>
+            <button class="btn btn-danger" @onclick="() => OnDeregisterClick.InvokeAsync(Course)">Deregister</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Course Course { get; set; }
+
+    [Parameter]
+    public EventCallback<Course> OnDeregisterClick { get; set; }
+}

@@ -1,0 +1,48 @@
+﻿@page "/enrolledcourses"
+@using CourseEnrollmentApp.Core.Entities
+@using CourseEnrollmentApp.Core.Interfaces.Repositories
+
+@inject ICourseRegistrationRepository _courseRegistrationRepository
+@inject ICourseRegistrationService _courseRegistrationService
+
+<div class="container">
+    <div class="row">
+        @if (courses != null)
+        {
+            @foreach (var course in courses)
+            {
+                <_EnrolledCourseCard Course="course" OnDeregisterClick="DeRegisterForCourse"></_EnrolledCourseCard>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <p>Loading courses...</p>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+
+    private List<Course>? courses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        courses = await GetCourses();
+    }
+
+    private async Task DeRegisterForCourse(Course course)
+    {
+        if (await _courseRegistrationService.DeregisterCourseAsync(1, course.Id))
+        {
+            courses = await GetCourses();
+        }
+    }
+
+    private async Task<List<Course>> GetCourses()
+    {
+        var enrolledCourses = await _courseRegistrationRepository.GetCourseRegistrationsByStudentIdAsync(1);
+        return enrolledCourses.Select(cards => cards.Course!).ToList();
+    }
+}
