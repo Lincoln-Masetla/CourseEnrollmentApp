@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CourseEnrollmentApp.Application\CourseEnrollmentApp.Application.csproj" />
+    <ProjectReference Include="..\CourseEnrollmentApp.Core\CourseEnrollmentApp.Core.csproj" />
   </ItemGroup>
 
 </Project>
