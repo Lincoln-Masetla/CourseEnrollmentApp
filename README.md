@@ -6,7 +6,7 @@ This repository contains the source code for the Course Enrollment App, a web ap
 
 Clean Architecture was chosen for this project due to its numerous benefits, which include separation of concerns, scalability, testability, adaptability, easier maintenance, and loose coupling. These characteristics ensure a well-organized, manageable, and flexible codebase that simplifies development, testing, and future enhancements.
 
-### Layers
+## Layers
 
 The Clean Architecture principle is applied in this project, separating concerns into clear layers:
 
