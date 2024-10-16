@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
+using CourseEnrollmentApp.Core.Entities;
 
 namespace CourseEnrollmentApp.Web.Services
 {
@@ -20,8 +21,18 @@ namespace CourseEnrollmentApp.Web.Services
             return Task.FromResult(new AuthenticationState(user));
         }
 
-        public async Task MarkUserAsAuthenticated(ClaimsPrincipal user)
+        public async Task MarkUserAsAuthenticated(Student user)
         {
+            var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+        };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
             var httpContext = _httpContextAccessor.HttpContext;
 
             var authProperties = new AuthenticationProperties
@@ -31,7 +42,7 @@ namespace CourseEnrollmentApp.Web.Services
 
             await httpContext!.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                user,
+                principal,
                 authProperties);
 
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
@@ -42,6 +53,7 @@ namespace CourseEnrollmentApp.Web.Services
             var httpContext = _httpContextAccessor.HttpContext;
             await httpContext!.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            
         }
     }
 }

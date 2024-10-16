@@ -68,6 +68,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 app.UseAuthorization();
 app.UseAuthentication();
+app.UseStatusCodePagesWithRedirects("/404");
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

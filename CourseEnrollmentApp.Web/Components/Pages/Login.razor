@@ -1,10 +1,5 @@
 ﻿@page "/login"
-@using CourseEnrollmentApp.Core.Interfaces.Repositories
-@using CourseEnrollmentApp.Web.Models
-@using CourseEnrollmentApp.Web.Services
-@using Microsoft.AspNetCore.Authentication.Cookies
-@using Microsoft.AspNetCore.Components.Authorization
-@using System.Security.Claims
+
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IStudentRepository _studentRepository
@@ -52,7 +47,7 @@
         var user = await _studentRepository.GetStudentByEmailAsync(loginDto.Email);
         if (user == null || user.Password != loginDto.Password)
         {
-            errorMessage = "Invalid email or password";
+            errorMessage = "Invalid email or password.";
             return;
         }
 
@@ -61,20 +56,10 @@
             errorMessage = "User email is invalid.";
             return;
         }
-
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.Email),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-        };
-
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var principal = new ClaimsPrincipal(identity);
-
+        
         // Notify the authentication state provider
         var authStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
-        await authStateProvider.MarkUserAsAuthenticated(principal);
+        await authStateProvider.MarkUserAsAuthenticated(user);
 
         // Redirect to avoid response already started issue
         Navigation.NavigateTo("/");

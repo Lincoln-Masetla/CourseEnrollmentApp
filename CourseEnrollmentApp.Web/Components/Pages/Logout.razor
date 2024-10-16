@@ -1,0 +1,13 @@
+﻿@page "/logout"
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject NavigationManager Navigation
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ((CustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
+
+        // Redirect to avoid response already started issue
+        Navigation.NavigateTo("/");
+    }
+}

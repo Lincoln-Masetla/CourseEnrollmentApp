@@ -17,7 +17,7 @@ namespace CourseEnrollmentApp.Infrastructure.Data
             // Seed 10 students
             string[] firstNames = { "Emma", "Liam", "Olivia", "Noah", "Ava", "Lucas", "Isabella", "Mason", "Sophia", "Ethan" };
             string[] lastNames = { "Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Garcia", "Martinez", "Lee", "Perez" };
-            string[] passwords = { "P@ssw0rd1", "P@ssw0rd2", "P@ssw0rd3", "P@ssw0rd4", "P@ssw0rd5", "P@ssw0rd6", "P@ssw0rd7", "P@ssw0rd8", "P@ssw0rd9", "P@ssw0rd10" };
+            string[] passwords = { "Password1", "P@ssw0rd2", "P@ssw0rd3", "P@ssw0rd4", "P@ssw0rd5", "P@ssw0rd6", "P@ssw0rd7", "P@ssw0rd8", "P@ssw0rd9", "P@ssw0rd10" };
 
             for (int i = 1; i <= 10; i++)
             {

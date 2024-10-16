@@ -1,7 +1,52 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
 
-<PageTitle>Home</PageTitle>
+<div class="container mt-5">
+    <div class="jumbotron text-center bg-secondary text-white">
+        <h1 class="display-4">Welcome to Our Learning Platform</h1>
+        <p class="lead">This is a learning platform that offers a variety of courses to help you enhance your skills and knowledge.</p>
+    </div>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Wide Range of Courses</h5>
+                    <p class="card-text">Explore a wide range of courses across different domains and skill levels. Whether you're a beginner or an expert, we have something for everyone.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Expert Instructors</h5>
+                    <p class="card-text">Learn from industry experts and experienced instructors who are passionate about teaching and sharing their knowledge.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Flexible Learning</h5>
+                    <p class="card-text">Enjoy the flexibility of learning at your own pace and on your own schedule. Access course materials anytime, anywhere.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <AuthorizeView>
+        <NotAuthorized>
+            <div class="row mt-5">
+                <div class="col-md-6 text-center">
+                    <h2>Join Us Today</h2>
+                    <p>Sign up now and start your learning journey with us. Unlock new opportunities and achieve your goals with our comprehensive courses.</p>
+                    <a href="/register" class="btn btn-primary btn-lg">Register as a Student</a>
+                </div>
+                <div class="col-md-6 text-center">
+                    <h2>Login Today</h2>
+                    <p>Login now and continue your learning journey with us. Unlock new opportunities and achieve your goals with our comprehensive courses.</p>
+                    <a href="/login" class="btn btn-primary btn-lg">Already a Student</a>
+                </div>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>

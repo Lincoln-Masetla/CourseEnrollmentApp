@@ -1,5 +1,8 @@
 ﻿@page "/courses"
-@using CourseEnrollmentApp.Core.Interfaces.Repositories
+@attribute [Authorize]
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+
 
 @inject ICourseRegistrationRepository _courseRegistrationRepository
 @inject ICourseRegistrationService _courseRegistrationService
