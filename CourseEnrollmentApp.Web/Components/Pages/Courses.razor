@@ -1,8 +1,7 @@
 ﻿@page "/courses"
-@attribute [Authorize]
 @attribute [StreamRendering]
 @rendermode InteractiveServer
-
+@attribute [Authorize]
 
 @inject ICourseRegistrationRepository _courseRegistrationRepository
 @inject ICourseRegistrationService _courseRegistrationService
@@ -13,7 +12,7 @@
         {
             @foreach (var course in courses)
             {
-               <_CourseCard Course="course" OnRegisterClick="RegisterForCourse"></_CourseCard>
+                <_CourseCard Course="course" OnRegisterClick="RegisterForCourse"></_CourseCard>
             }
         }
         else
@@ -33,7 +32,7 @@
         courses = await GetCourses();
     }
 
-    private async Task RegisterForCourse(Course course)
+    public async Task RegisterForCourse(Course course)
     {
         if (await _courseRegistrationService.RegisterCourseAsync(1, course.Id))
         {
@@ -41,9 +40,9 @@
         }
     }
 
-    private async Task<List<Course>> GetCourses()
+    public async Task<List<Course>> GetCourses()
     {
         var enrolledCourses = await _courseRegistrationRepository.GetCourseNotRegisteredByStudentIdAsync(1);
-        return enrolledCourses.Select(cards => cards.Course!).ToList();
+        return enrolledCourses?.Select(cards => cards?.Course!).ToList();
     }
 }

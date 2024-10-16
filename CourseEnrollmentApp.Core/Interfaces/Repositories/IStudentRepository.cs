@@ -4,7 +4,8 @@ namespace CourseEnrollmentApp.Core.Interfaces.Repositories
 {
     public interface IStudentRepository
     {
-        Task<Student> AddStudentAsync(Student student);
+        Task<Student?> AddStudentAsync(Student student);
         Task<Student?> GetStudentByEmailAsync(string email);
+        Task<Student?> UpdateStudentAsync(Student student);
     }
 }

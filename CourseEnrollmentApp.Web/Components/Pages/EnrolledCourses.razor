@@ -1,7 +1,7 @@
 ﻿@page "/enrolledcourses"
-@attribute [Authorize]
-@attribute [StreamRendering]
 @rendermode InteractiveServer
+@attribute [StreamRendering]
+@attribute [Authorize]
 
 @inject ICourseRegistrationRepository _courseRegistrationRepository
 @inject ICourseRegistrationService _courseRegistrationService
@@ -33,7 +33,7 @@
         courses = await GetCourses();
     }
 
-    private async Task DeRegisterForCourse(Course course)
+    public async Task DeRegisterForCourse(Course course)
     {
         if (await _courseRegistrationService.DeregisterCourseAsync(1, course.Id))
         {
@@ -41,9 +41,9 @@
         }
     }
 
-    private async Task<List<Course>> GetCourses()
+    public async Task<List<Course>> GetCourses()
     {
         var enrolledCourses = await _courseRegistrationRepository.GetCourseRegistrationsByStudentIdAsync(1);
-        return enrolledCourses.Select(cards => cards.Course!).ToList();
+        return enrolledCourses?.Select(cards => cards.Course).ToList();
     }
 }

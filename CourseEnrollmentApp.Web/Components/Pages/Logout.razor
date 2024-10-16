@@ -7,7 +7,6 @@
     {
         await ((CustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
 
-        // Redirect to avoid response already started issue
         Navigation.NavigateTo("/");
     }
 }

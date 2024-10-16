@@ -34,9 +34,9 @@
     [SupplyParameterFromForm]
     public LoginDto loginDto { get; set; } = new LoginDto();
 
-    private string? errorMessage;
+    public string? errorMessage;
 
-    private async Task LoginUser()
+    public async Task LoginUser()
     {
         if (loginDto == null || string.IsNullOrEmpty(loginDto.Email))
         {
@@ -61,7 +61,6 @@
         var authStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
         await authStateProvider.MarkUserAsAuthenticated(user);
 
-        // Redirect to avoid response already started issue
         Navigation.NavigateTo("/");
     }
 }

@@ -16,7 +16,7 @@ namespace CourseEnrollmentApp.Application.Services
         public async Task<Student?> RegisterStudentAsync(Student student)
         {
             
-            if (await _studentRepository.GetStudentByEmailAsync(student.Email) != null)
+            if (await _studentRepository.GetStudentByEmailAsync(student.Email!) != null)
             {
                 return null;
             }
@@ -24,12 +24,19 @@ namespace CourseEnrollmentApp.Application.Services
             return await _studentRepository.AddStudentAsync(student);
         }
 
+        public async Task<Student?> UpdateStudentAsync(Student student)
+        {
+            if (await _studentRepository.GetStudentByEmailAsync(student.Email!) != null)
+            {
+                return null;
+            }
+            return await _studentRepository.UpdateStudentAsync(student) ?? new Student();
+        }
+
         public async Task<Student?> GetStudentByEmailAsync(string email)
         {
-            if (email == null)
-                throw new ArgumentNullException(nameof(email));
-
             return await _studentRepository.GetStudentByEmailAsync(email);
         }
+
     }
 }

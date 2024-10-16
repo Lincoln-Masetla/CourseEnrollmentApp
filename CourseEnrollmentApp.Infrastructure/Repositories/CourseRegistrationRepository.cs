@@ -14,7 +14,7 @@ namespace CourseEnrollmentApp.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<CourseRegistration> AddCourseRegistrationAsync(CourseRegistration courseRegistration)
+        public async Task<CourseRegistration?> AddCourseRegistrationAsync(CourseRegistration courseRegistration)
         {
             _dbContext.CourseRegistrations.Add(courseRegistration);
             var results = await _dbContext.SaveChangesAsync();
@@ -29,7 +29,7 @@ namespace CourseEnrollmentApp.Infrastructure.Repositories
 
         }
 
-        public async Task<IEnumerable<CourseRegistration>> GetCourseRegistrationsByStudentIdAsync(int studentId)
+        public async Task<IEnumerable<CourseRegistration?>> GetCourseRegistrationsByStudentIdAsync(int studentId)
         {
             return await _dbContext.CourseRegistrations
                 .Where(cr => cr.StudentId == studentId)
@@ -43,7 +43,7 @@ namespace CourseEnrollmentApp.Infrastructure.Repositories
                 .FirstOrDefaultAsync(cr => cr.StudentId == studentId && cr.CourseId == courseId);
         }
 
-        public async Task<IEnumerable<CourseRegistration>> GetCourseNotRegisteredByStudentIdAsync(int studentId)
+        public async Task<IEnumerable<CourseRegistration?>> GetCourseNotRegisteredByStudentIdAsync(int studentId)
         {
             return await _dbContext.Courses
                 .Where(c => c.CourseRegistrations == null || !c.CourseRegistrations.Any(cr => cr.StudentId == studentId))

@@ -1,16 +1,4 @@
-﻿<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly">
-        <Found Context="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-        </Found>
-        <NotFound>
-            <h1>404 Not Found</h1>
-        </NotFound>
-    </Router>
-</CascadingAuthenticationState>
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -21,10 +9,11 @@
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="CourseEnrollmentApp.Web.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    <HeadOutlet />
+     <HeadOutlet/> 
 </head>
 
 <body>
+    <Routes/>
     <script src="_framework/blazor.web.js"></script>
 </body>
 

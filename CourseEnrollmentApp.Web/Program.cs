@@ -8,7 +8,6 @@ using CourseEnrollmentApp.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
-using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,20 +26,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
-//builder.Services.AddHttpContextAccessor();
-
 
 builder.Services.Configure<CircuitOptions>(options => options.DetailedErrors = true);
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<CustomAuthenticationStateProvider>();
 builder.Services.AddAuthorizationCore();
 
 builder.Services.AddTransient<IStudentService, StudentService>();
-builder.Services.AddTransient<ICourseService, CourseService>();
 builder.Services.AddTransient<ICourseRegistrationService, CourseRegistrationService>();
 
 builder.Services.AddTransient<IStudentRepository, StudentRepository>();
-builder.Services.AddTransient<ICourseRepository, CourseRepository>();
 builder.Services.AddTransient<ICourseRegistrationRepository, CourseRegistrationRepository>();
 
 builder.Services.AddScoped(_ => InMemoryDatabase.GetOptions());
@@ -54,20 +50,19 @@ var app = builder.Build();
 // Initialize the database
 await InitializeDatabase(app.Services);
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-app.UseAntiforgery();
-app.UseAuthorization();
+
 app.UseAuthentication();
+app.UseAuthorization();
+app.UseAntiforgery();
+
 app.UseStatusCodePagesWithRedirects("/404");
 
 app.MapRazorComponents<App>()

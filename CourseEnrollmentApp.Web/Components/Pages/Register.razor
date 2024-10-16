@@ -51,9 +51,9 @@
     [SupplyParameterFromForm]
     public StudentDto student { get; set; } = new StudentDto();
 
-    private string? errorMessage;
+    public string? errorMessage;
 
-    private async Task RegisterUser()
+    public async Task RegisterUser()
     {
         if (student == null || string.IsNullOrEmpty(student.Email))
         {
@@ -84,7 +84,7 @@
 
         // Notify the authentication state provider
         var authStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
-        await authStateProvider.MarkUserAsAuthenticated(registeredStudent);
+        await authStateProvider.MarkUserAsAuthenticated(registeredStudent ?? new Student());
 
         Navigation.NavigateTo("/courses");
     }
