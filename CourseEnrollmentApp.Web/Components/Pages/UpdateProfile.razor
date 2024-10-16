@@ -14,8 +14,14 @@
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title text-center">Student Registration</h3>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
+                        </div>
+                    }
                     <EditForm Model="@student" OnValidSubmit="UpdateUser" FormName="UpdateForm">
-                        
+
                         <DataAnnotationsValidator />
                         <ValidationSummary />
 
@@ -48,7 +54,9 @@
 </div>
 
 @code {
-    public Student student = new Student();
+    [SupplyParameterFromForm]
+    public Student student { get; set; } = new Student();
+    private string? errorMessage = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,12 +70,27 @@
             {
                 student = await StudentService.GetStudentByEmailAsync(email) ?? new Student();
             }
+            else
+            {
+                errorMessage = "Unable to retrieve email from user claims.";
+            }
+        }
+        else
+        {
+            errorMessage = "User is not authenticated.";
         }
     }
 
     public async Task UpdateUser()
     {
-        await StudentService.UpdateStudentAsync(student);
-        Navigation.NavigateTo("/");
+        try
+        {
+            await StudentService.UpdateStudentAsync(student);
+            Navigation.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred while updating the profile: {ex.Message}";
+        }
     }
 }

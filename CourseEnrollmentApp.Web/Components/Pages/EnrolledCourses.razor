@@ -3,12 +3,19 @@
 @attribute [StreamRendering]
 @attribute [Authorize]
 
+@inject CustomAuthenticationStateProvider CustomAuthStateProvider
 @inject ICourseRegistrationRepository _courseRegistrationRepository
 @inject ICourseRegistrationService _courseRegistrationService
 
 <div class="container">
     <div class="row">
-        @if (courses != null)
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @errorMessage
+            </div>
+        }
+        else if (courses != null)
         {
             @foreach (var course in courses)
             {
@@ -25,25 +32,56 @@
 </div>
 
 @code {
-
     private List<Course>? courses;
+    private int? studentId = null;
+    private string? errorMessage = null;
 
     protected override async Task OnInitializedAsync()
     {
-        courses = await GetCourses();
+        var authState = await CustomAuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        studentId = user.GetStudentId();
+
+        if (studentId.HasValue)
+        {
+            courses = await GetCourses();
+        }
+        else
+        {
+            errorMessage = "Unable load courses. Please log in again.";
+        }
     }
 
     public async Task DeRegisterForCourse(Course course)
     {
-        if (await _courseRegistrationService.DeregisterCourseAsync(1, course.Id))
+        if (studentId.HasValue)
         {
-            courses = await GetCourses();
+            if (await _courseRegistrationService.DeregisterCourseAsync(studentId.Value, course.Id))
+            {
+                courses = await GetCourses();
+            }
+            else
+            {
+                errorMessage = "Failed to deregister from the course. Please try again.";
+            }
+        }
+        else
+        {
+            errorMessage = "Oops! Something went wrong. Please log in again.";
         }
     }
 
     public async Task<List<Course>> GetCourses()
     {
-        var enrolledCourses = await _courseRegistrationRepository.GetCourseRegistrationsByStudentIdAsync(1);
-        return enrolledCourses?.Select(cards => cards.Course).ToList();
+        if (studentId.HasValue)
+        {
+            var enrolledCourses = await _courseRegistrationRepository.GetCourseRegistrationsByStudentIdAsync(studentId.Value);
+            return enrolledCourses?.Select(cards => cards.Course).ToList();
+        }
+        else
+        {
+            errorMessage = "Oops! Something went wrong. Please log in again.";
+            return new List<Course>();
+        }
     }
 }

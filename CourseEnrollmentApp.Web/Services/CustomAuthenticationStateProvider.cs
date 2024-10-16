@@ -27,6 +27,7 @@ namespace CourseEnrollmentApp.Web.Services
         {
             new Claim(ClaimTypes.Name, user.Email),
             new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
         };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

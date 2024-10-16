@@ -85,6 +85,7 @@ namespace CourseEnrollmentApp.Web.Tests.Components.Pages
 
             var cut = RenderComponent<UpdateProfile>();
 
+            // Wait for the component to finish initializing
             cut.WaitForAssertion(() => Assert.IsNotNull(cut.Instance.student));
             cut.WaitForAssertion(() => Assert.AreEqual("john.doe@example.com", cut.Instance.student.Email));
 
