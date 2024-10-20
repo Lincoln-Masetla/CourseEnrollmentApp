@@ -1,8 +1,5 @@
-using CourseEnrollmentApp.Application.Services;
-using CourseEnrollmentApp.Core.Interfaces.Repositories;
-using CourseEnrollmentApp.Core.Interfaces.Services;
-using CourseEnrollmentApp.Infrastructure.Data;
-using CourseEnrollmentApp.Infrastructure.Repositories;
+using CourseEnrollmentApp.Application;
+using CourseEnrollmentApp.Infrastructure;
 using CourseEnrollmentApp.Web.Components;
 using CourseEnrollmentApp.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -32,15 +29,8 @@ builder.Services.Configure<CircuitOptions>(options => options.DetailedErrors = t
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<CustomAuthenticationStateProvider>();
 builder.Services.AddAuthorizationCore();
-
-builder.Services.AddTransient<IStudentService, StudentService>();
-builder.Services.AddTransient<ICourseRegistrationService, CourseRegistrationService>();
-
-builder.Services.AddTransient<IStudentRepository, StudentRepository>();
-builder.Services.AddTransient<ICourseRegistrationRepository, CourseRegistrationRepository>();
-
-builder.Services.AddScoped(_ => InMemoryDatabase.GetOptions());
-builder.Services.AddScoped<ApplicationDbContext>();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 // Register IHttpContextAccessor
 builder.Services.AddHttpContextAccessor();
@@ -48,7 +38,7 @@ builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Initialize the database
-await InitializeDatabase(app.Services);
+app.Services.AddInfrastructureAsync().Wait();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -70,14 +60,4 @@ app.MapRazorComponents<App>()
 
 app.Run();
 
-async Task InitializeDatabase(IServiceProvider services)
-{
-    using (var scope = services.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        // Seed the in-memory database
-        InMemoryDatabase.SeedData(dbContext);
-        await dbContext.SaveChangesAsync();
-    }
-}
