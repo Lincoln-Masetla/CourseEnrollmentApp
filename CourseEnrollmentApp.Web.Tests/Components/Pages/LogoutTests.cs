@@ -9,6 +9,7 @@ using CourseEnrollmentApp.Web.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using CourseEnrollmentApp.Web.Components.Pages.Accounts;
 
 namespace CourseEnrollmentApp.Web.Tests.Components.Pages
 {

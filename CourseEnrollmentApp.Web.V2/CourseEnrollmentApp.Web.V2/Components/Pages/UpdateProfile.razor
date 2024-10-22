@@ -1,0 +1,96 @@
+﻿@page "/updateprofile-v2"
+@rendermode InteractiveWebAssembly
+@attribute [Authorize]
+
+@inject IStudentService StudentService
+@inject NavigationManager Navigation
+@inject CustomAuthenticationStateProvider CustomAuthStateProvider
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@inject IHttpContextAccessor HttpContextAccessor
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Student Registration</h3>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
+                        </div>
+                    }
+                    <EditForm Model="@student" OnValidSubmit="UpdateUser" FormName="UpdateForm">
+
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="@student.FirstName" class="form-control" aria-required="true" placeholder="First Name" />
+                            <label for="firstName">First Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="@student.LastName" class="form-control" aria-required="true" placeholder="Last Name" />
+                            <label for="lastName">Last Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="@student.Email" type="email" class="form-control" aria-required="true" placeholder="Email" />
+                            <label for="email">Email</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="@student.Password" type="password" class="form-control" aria-required="true" placeholder="Password" />
+                            <label for="password">Password</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Update</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public Student student { get; set; } = new Student();
+    private string? errorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await CustomAuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            var email = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value;
+            if (!string.IsNullOrEmpty(email))
+            {
+                student = await StudentService.GetStudentByEmailAsync(email) ?? new Student();
+            }
+            else
+            {
+                errorMessage = "Unable to retrieve email from user claims.";
+            }
+        }
+        else
+        {
+            errorMessage = "User is not authenticated.";
+        }
+    }
+
+    public async Task UpdateUser()
+    {
+        try
+        {
+            await StudentService.UpdateStudentAsync(student);
+            Navigation.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred while updating the profile: {ex.Message}";
+        }
+    }
+}

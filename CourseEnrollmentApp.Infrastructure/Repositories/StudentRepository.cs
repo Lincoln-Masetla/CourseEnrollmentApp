@@ -17,21 +17,22 @@ namespace CourseEnrollmentApp.Infrastructure.Repositories
         public async Task<Student?> AddStudentAsync(Student student)
         {
             _dbContext.Students.Add(student);
-            var results = await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return student;
         }
 
         public async Task<Student?> UpdateStudentAsync(Student student)
         {
             _dbContext.Students.Update(student);
-            var results = await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return student;
         }
 
         public async Task<Student?> GetStudentByEmailAsync(string email)
         {
             return await _dbContext.Students
-                .Include(c => c.CourseRegistrations)
+                .AsNoTracking()
+                .Include(s => s.CourseRegistrations)
                 .FirstOrDefaultAsync(s => s.Email == email);
         }
     }

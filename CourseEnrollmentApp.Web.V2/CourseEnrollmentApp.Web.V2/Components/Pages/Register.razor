@@ -1,0 +1,91 @@
+﻿@page "/register-v2"
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IStudentService _studentService
+@inject IStudentRepository _studentRepository
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Student Registration</h3>
+                    <EditForm Model="@student" OnValidSubmit="RegisterUser" FormName="RegisterUser">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="@student.FirstName" class="form-control" aria-required="true" placeholder="Password" />
+                            <label for="firstName">First Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="@student.LastName" class="form-control" aria-required="true" placeholder="Password" />
+                            <label for="lastName">Last Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="@student.Email" type="email" class="form-control" aria-required="true" placeholder="Password" />
+                            <label for="email">Email</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="@student.Password" type="password" class="form-control" aria-required="true" placeholder="Password" />
+                            <label for="password">Password</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </EditForm>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger mt-3">@errorMessage</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+@code {
+    [SupplyParameterFromForm]
+    public StudentDto student { get; set; } = new StudentDto();
+
+    public string? errorMessage;
+
+    public async Task RegisterUser()
+    {
+        if (student == null || string.IsNullOrEmpty(student.Email))
+        {
+            errorMessage = "Email is required.";
+            return;
+        }
+
+        var user = await _studentRepository.GetStudentByEmailAsync(student.Email);
+        if (user != null)
+        {
+            errorMessage = "Email is already registered.";
+            return;
+        }
+
+        var registeredStudent = await _studentService.RegisterStudentAsync(new Student
+        {
+            Email = student.Email,
+            FirstName = student.FirstName,
+            LastName = student.LastName,
+            Password = student.Password
+        });
+
+        if (registeredStudent != null && registeredStudent.Id == null)
+        {
+            errorMessage = "Oops! Something went wrong try again later.";
+            return;
+        }
+
+        // Notify the authentication state provider
+        var authStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+        await authStateProvider.MarkUserAsAuthenticated(registeredStudent ?? new Student());
+
+        Navigation.NavigateTo("/courses");
+    }
+}

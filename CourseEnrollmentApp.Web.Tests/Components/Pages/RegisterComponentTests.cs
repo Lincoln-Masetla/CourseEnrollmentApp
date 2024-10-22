@@ -3,6 +3,7 @@ using CourseEnrollmentApp.Core.Entities;
 using CourseEnrollmentApp.Core.Interfaces.Repositories;
 using CourseEnrollmentApp.Core.Interfaces.Services;
 using CourseEnrollmentApp.Web.Components.Pages;
+using CourseEnrollmentApp.Web.Components.Pages.Accounts;
 using CourseEnrollmentApp.Web.Models;
 using CourseEnrollmentApp.Web.Services;
 using Microsoft.AspNetCore.Authentication;

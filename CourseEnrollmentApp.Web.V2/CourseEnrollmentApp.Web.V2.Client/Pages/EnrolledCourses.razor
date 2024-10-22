@@ -1,0 +1,90 @@
+﻿@page "/enrolledcourses"
+@using CourseEnrollmentApp.Core.Entities
+@using CourseEnrollmentApp.Web.V2.Client.Services
+@using CourseEnrollmentApp.Web.V2.Client.Services.Contract
+@using Microsoft.AspNetCore.Authorization
+@rendermode InteractiveWebAssembly
+@attribute [StreamRendering]
+@attribute [Authorize]
+
+@inject CustomAuthenticationStateProvider CustomAuthStateProvider
+@inject StudentClientService studentClientService
+
+<div class="container">
+    <div class="row">
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @errorMessage
+            </div>
+        }
+        else if (courses != null)
+        {
+            @foreach (var course in courses)
+            {
+                <_EnrolledCourseCard Course="course" OnDeregisterClick="DeRegisterForCourse"></_EnrolledCourseCard>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <p>Loading courses...</p>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<Course>? courses;
+    private int? studentId = null;
+    private string? errorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await CustomAuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        studentId = user.GetStudentId();
+
+        if (studentId.HasValue)
+        {
+            courses = await GetCourses();
+        }
+        else
+        {
+            errorMessage = "Unable load courses. Please log in again.";
+        }
+    }
+
+    public async Task DeRegisterForCourse(Course course)
+    {
+        if (studentId.HasValue)
+        {
+            if (await studentClientService.DeregisterCourseAsync(new CourseRegistration { CourseId = course.Id, StudentId = studentId.Value}))
+            {
+                courses = await GetCourses();
+            }
+            else
+            {
+                errorMessage = "Failed to deregister from the course. Please try again.";
+            }
+        }
+        else
+        {
+            errorMessage = "Oops! Something went wrong. Please log in again.";
+        }
+    }
+
+    public async Task<List<Course>> GetCourses()
+    {
+        if (studentId.HasValue)
+        {
+            var enrolledCourses = await studentClientService.GetCourseRegistrationsByStudentIdAsync(studentId.Value);
+            return enrolledCourses?.Select(cards => cards.Course).ToList() ?? new List<Course?>();
+        }
+        else
+        {
+            errorMessage = "Oops! Something went wrong. Please log in again.";
+            return new List<Course>();
+        }
+    }
+}

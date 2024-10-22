@@ -12,7 +12,7 @@ namespace CourseEnrollmentApp.Web.Tests.Components
         public override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var claims = new[] { new Claim(ClaimTypes.Email, "john.doe@example.com"), new Claim(ClaimTypes.NameIdentifier, "1") };
-            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            var identity = new ClaimsIdentity(claims);
             var user = new ClaimsPrincipal(identity);
             var authState = new AuthenticationState(user);
             return Task.FromResult(authState);

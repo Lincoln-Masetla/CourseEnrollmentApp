@@ -1,0 +1,18 @@
+﻿@page "/accounts/logout"
+@using Microsoft.AspNetCore.Authentication
+
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject NavigationManager Navigation
+
+@code {
+
+    [CascadingParameter]
+    private HttpContext httpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await httpContext!.SignOutAsync("TdtsCookie");
+
+        Navigation.NavigateTo("/");
+    }
+}

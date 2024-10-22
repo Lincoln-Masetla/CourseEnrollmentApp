@@ -86,7 +86,7 @@ namespace CourseEnrollmentApp.Infrastructure.Tests.Repositories
                 new CourseRegistration
                 {
                     StudentId = studentId,
-                    CourseId = 2, // Changed CourseId to 2 to avoid conflict
+                    CourseId = 2,
                     Course = new Course { Id = 2, Name = "Course 2" },
                     Student = student
                 }

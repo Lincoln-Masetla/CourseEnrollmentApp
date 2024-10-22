@@ -19,12 +19,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseEnrollmentApp.Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseEnrollmentApp.Infrastructure.Tests", "CourseEnrollmentApp.Infrastructure.Tests\CourseEnrollmentApp.Infrastructure.Tests.csproj", "{502CA04A-1EC4-48D8-A175-AB898EA017E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseEnrollmentApp.Web.Tests", "CourseEnrollmentApp.Web.Tests\CourseEnrollmentApp.Web.Tests.csproj", "{8BBE4E27-8613-467E-8557-95CF4B8D85FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseEnrollmentApp.Web.Tests", "CourseEnrollmentApp.Web.Tests\CourseEnrollmentApp.Web.Tests.csproj", "{8BBE4E27-8613-467E-8557-95CF4B8D85FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6ED9B586-255A-4638-9A37-711C981364C5}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "v2", "v2", "{241153DF-99EA-4F65-9FD1-D1F52E2B87D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseEnrollmentApp.Web.WASM", "CourseEnrollmentApp.Web.WASM\CourseEnrollmentApp.Web.WASM\CourseEnrollmentApp.Web.WASM.csproj", "{EB52F3BB-29C4-48DA-92E6-0949CD1AA864}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseEnrollmentApp.Web.WASM.Client", "CourseEnrollmentApp.Web.WASM\CourseEnrollmentApp.Web.WASM.Client\CourseEnrollmentApp.Web.WASM.Client.csproj", "{5436D846-1397-4931-8DD2-9859EBEFA7DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +66,14 @@ Global
 		{8BBE4E27-8613-467E-8557-95CF4B8D85FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BBE4E27-8613-467E-8557-95CF4B8D85FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BBE4E27-8613-467E-8557-95CF4B8D85FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB52F3BB-29C4-48DA-92E6-0949CD1AA864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB52F3BB-29C4-48DA-92E6-0949CD1AA864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB52F3BB-29C4-48DA-92E6-0949CD1AA864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB52F3BB-29C4-48DA-92E6-0949CD1AA864}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5436D846-1397-4931-8DD2-9859EBEFA7DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5436D846-1397-4931-8DD2-9859EBEFA7DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5436D846-1397-4931-8DD2-9859EBEFA7DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5436D846-1397-4931-8DD2-9859EBEFA7DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +86,9 @@ Global
 		{7089B176-5280-47B3-A144-8C2674D400C3} = {7E09DE1E-8CBE-415C-8C2D-B6E19BE3DDB5}
 		{502CA04A-1EC4-48D8-A175-AB898EA017E6} = {7E09DE1E-8CBE-415C-8C2D-B6E19BE3DDB5}
 		{8BBE4E27-8613-467E-8557-95CF4B8D85FC} = {7E09DE1E-8CBE-415C-8C2D-B6E19BE3DDB5}
+		{241153DF-99EA-4F65-9FD1-D1F52E2B87D7} = {8582743D-9487-46D9-9A65-B42FC5B05F67}
+		{EB52F3BB-29C4-48DA-92E6-0949CD1AA864} = {241153DF-99EA-4F65-9FD1-D1F52E2B87D7}
+		{5436D846-1397-4931-8DD2-9859EBEFA7DA} = {241153DF-99EA-4F65-9FD1-D1F52E2B87D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {33E3A176-CCBB-40B5-8DC9-B00BF0F0CB84}

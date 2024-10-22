@@ -61,8 +61,8 @@ namespace CourseEnrollmentApp.Web.Tests
             var authState = await _authStateProvider.GetAuthenticationStateAsync();
 
             // Assert
-            Assert.IsTrue(authState.User.Identity.IsAuthenticated);
-            Assert.AreEqual("test@example.com", authState.User.Identity.Name);
+            Assert.That(authState.User.Identity.IsAuthenticated, Is.True);
+            Assert.That(authState.User.Identity.Name, Is.EqualTo("test@example.com"));
         }
 
         [Test]
