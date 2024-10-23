@@ -28,6 +28,8 @@ By organizing the project into these distinct layers, the application benefits f
 - **CourseEnrollmentApp.Web**: The web frontend, including views, components, and controllers.
 - **Tests**: Unit tests for the Application, Infrastructure, and Web layers.
 
+  ![clean resized](https://github.com/user-attachments/assets/7f44d88a-2399-4ade-9b30-d033267d2062)
+
 ## Requirements
 
 - .NET 8 SDK
@@ -50,3 +52,4 @@ To set up and run the project, follow these steps:
 ## Testing
 
 Each project component (Application, Infrastructure, and Web) has corresponding unit tests. To run the tests, open the "Test Explorer" in Visual Studio, and click "Run All".
+
