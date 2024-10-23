@@ -33,6 +33,7 @@ namespace CourseEnrollmentApp.Infrastructure.Repositories
             return await _dbContext.CourseRegistrations
                 .Where(cr => cr.StudentId == studentId)
                 .Include(cr => cr.Course)
+                .Include(cr => cr.Student)
                 .ToListAsync();
         }
 

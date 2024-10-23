@@ -28,9 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "v2", "v2", "{241153DF-99EA-4F65-9FD1-D1F52E2B87D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseEnrollmentApp.Web.WASM", "CourseEnrollmentApp.Web.WASM\CourseEnrollmentApp.Web.WASM\CourseEnrollmentApp.Web.WASM.csproj", "{EB52F3BB-29C4-48DA-92E6-0949CD1AA864}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseEnrollmentApp.Web.WASM", "CourseEnrollmentApp.Web.WASM\CourseEnrollmentApp.Web.WASM\CourseEnrollmentApp.Web.WASM.csproj", "{EB52F3BB-29C4-48DA-92E6-0949CD1AA864}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseEnrollmentApp.Web.WASM.Client", "CourseEnrollmentApp.Web.WASM\CourseEnrollmentApp.Web.WASM.Client\CourseEnrollmentApp.Web.WASM.Client.csproj", "{5436D846-1397-4931-8DD2-9859EBEFA7DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseEnrollmentApp.Web.WASM.Client", "CourseEnrollmentApp.Web.WASM\CourseEnrollmentApp.Web.WASM.Client\CourseEnrollmentApp.Web.WASM.Client.csproj", "{5436D846-1397-4931-8DD2-9859EBEFA7DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

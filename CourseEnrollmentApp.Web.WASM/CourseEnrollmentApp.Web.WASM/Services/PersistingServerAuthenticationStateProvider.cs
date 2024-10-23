@@ -49,12 +49,14 @@ namespace CourseEnrollmentApp.Web.WASM.Services
             if (principal.Identity?.IsAuthenticated == true)
             {
                 var userId = principal.FindFirst(options.ClaimsIdentity.UserNameClaimType)?.Value;
+                var email = principal.FindFirst(options.ClaimsIdentity.EmailClaimType)?.Value;
 
-                if (userId != null)
+                if (userId != null && email != null)
                 {
                     state.PersistAsJson(nameof(UserInfo), new UserInfo
                     {
                         UserId = userId,
+                        Email = email
                     });
                 }
             }

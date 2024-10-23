@@ -26,7 +26,7 @@ namespace CourseEnrollmentApp.Application.Services
 
         public async Task<Student?> UpdateStudentAsync(Student student)
         {
-            if (await _studentRepository.GetStudentByEmailAsync(student.Email!) != null)
+            if (await _studentRepository.GetStudentByEmailAsync(student.Email) == null)
             {
                 return null;
             }

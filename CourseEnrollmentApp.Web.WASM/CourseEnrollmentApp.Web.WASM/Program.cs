@@ -22,12 +22,25 @@ builder.Services.AddAuthentication("TdtsCookie")
          options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
          options.AccessDeniedPath = "/";
      });
-    
-builder.Services.AddAuthorization();
 
+builder.Services.AddAuthorization();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
+
+// Register HttpClient
+builder.Services.AddScoped(sp =>
+{
+    var baseAddress = builder.Configuration["BaseAddress"];
+    if (string.IsNullOrEmpty(baseAddress))
+    {
+        throw new InvalidOperationException("BaseAddress configuration is missing or empty.");
+    }
+    return new HttpClient { BaseAddress = new Uri(baseAddress) };
+});
+
+// Add controllers
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -49,10 +62,19 @@ else
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(CourseEnrollmentApp.Web.WASM.Client._Imports).Assembly);
+
+// Map controllers
+app.MapControllers();
+
+
 
 app.Run();

@@ -28,7 +28,8 @@ namespace CourseEnrollmentApp.Web.WASM.Client.Services
             }
 
             Claim[] claims = [
-                new Claim(ClaimTypes.Name, userInfo.UserId)
+                new Claim(ClaimTypes.Name, userInfo.UserId),
+                new Claim(ClaimTypes.Email, userInfo.Email),
                 ];
 
             authenticationStateTask = Task.FromResult(

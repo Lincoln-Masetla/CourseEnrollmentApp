@@ -1,0 +1,100 @@
+﻿@page "/v2/courses"
+@using CourseEnrollmentApp.Web.WASM.Client.Helpers
+@using CourseEnrollmentApp.Web.WASM.Client.Models
+@using CourseEnrollmentApp.Web.WASM.Client.Services
+@using Microsoft.AspNetCore.Authorization
+@using System.Text.Json
+@using System.Text
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject HttpClient _httpClient
+@* @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false)) *@
+@attribute [StreamRendering]
+@attribute [Authorize]
+
+<div class="container">
+    <div class="row">
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @errorMessage
+            </div>
+        }
+        else if (courses != null)
+        {
+            @foreach (var course in courses)
+            {
+                <_CourseCard Course="course" OnRegisterClick="RegisterForCourse"></_CourseCard>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <p>Loading courses...</p>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<CourseDto>? courses = new List<CourseDto>();
+    UserInfo userInfo;
+    private string? errorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userInfo = await AuthenticationStateProvider.GetUserInfoAsync();
+        courses = await GetCourses();
+    }
+
+    public async Task RegisterForCourse(CourseDto course)
+    {
+        if (await RegisterForCourseAsync(course.Id))
+        {
+            courses = await GetCourses();
+        }
+        else
+        {
+            errorMessage = "Failed to register for the course. Please try again.";
+        }
+    }
+
+    public async Task<List<CourseDto>> GetCourses()
+    {
+        var result = await GetCoursesAsync(userInfo.UserId);
+        return result ?? new List<CourseDto>();
+    }
+
+    private async Task<List<CourseDto>?> GetCoursesAsync(string studentId)
+    {
+        try
+        {
+            return await _httpClient.GetFromJsonAsync<List<CourseDto>>($"api/courses/not-registered/{studentId}");
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = $"Error fetching courses: {ex.Message}";
+            return null;
+        }
+    }
+
+    private async Task<bool> RegisterForCourseAsync(int courseId)
+    {
+        var request = new EnrollCourseDto { CourseId = courseId, StudentId = int.Parse(userInfo.UserId) };
+        var jsonContent = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+
+        try
+        {
+            var response = await _httpClient.PostAsync($"api/courses/register", jsonContent);
+            if (!response.IsSuccessStatusCode)
+            {
+                errorMessage = $"Failed to register for the course. Status code: {response.StatusCode}";
+            }
+            return response.IsSuccessStatusCode;
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = $"Error registering for course: {ex.Message}";
+            return false;
+        }
+    }
+}
