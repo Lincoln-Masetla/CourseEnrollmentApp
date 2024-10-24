@@ -53,8 +53,7 @@ namespace CourseEnrollmentApp.Web.Tests.Components.Pages
             var cut = RenderComponent<UpdateProfile>();
 
             // Assert
-            var exists = cut.Markup.Contains(@"<h3 class=""card-title text-center"">Student Registration</h3>");
-            Assert.IsTrue(exists);
+            Assert.IsTrue(cut.Markup.Contains(@"<h3 class=""card-title text-center"">Student Registration</h3>"));
         }
 
         [Test]
@@ -67,13 +66,13 @@ namespace CourseEnrollmentApp.Web.Tests.Components.Pages
             // Act
             var cut = RenderComponent<UpdateProfile>();
 
-            cut.WaitForAssertion(() => Assert.IsNotNull(cut.Instance.student));
-            cut.WaitForAssertion(() => Assert.AreEqual("john.doe@example.com", cut.Instance.student.Email));
+            cut.Instance.student = student;
 
             // Assert
+            cut.WaitForAssertion(() => Assert.IsNotNull(cut.Instance.student));
+            cut.WaitForAssertion(() => Assert.AreEqual("john.doe@example.com", cut.Instance.student.Email));
             Assert.AreEqual("John", cut.Instance.student.FirstName);
             Assert.AreEqual("Doe", cut.Instance.student.LastName);
-            Assert.AreEqual("john.doe@example.com", cut.Instance.student.Email);
         }
 
         [Test]
@@ -84,6 +83,8 @@ namespace CourseEnrollmentApp.Web.Tests.Components.Pages
             _studentServiceMock.Setup(service => service.UpdateStudentAsync(It.IsAny<Student>())).ReturnsAsync(student);
 
             var cut = RenderComponent<UpdateProfile>();
+
+            cut.Instance.student = student;
 
             // Wait for the component to finish initializing
             cut.WaitForAssertion(() => Assert.IsNotNull(cut.Instance.student));

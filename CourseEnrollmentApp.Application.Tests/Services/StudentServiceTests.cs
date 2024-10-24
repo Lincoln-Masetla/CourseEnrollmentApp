@@ -71,7 +71,7 @@ namespace CourseEnrollmentApp.Application.Tests.Services
 
                 _mockStudentRepository
                     .Setup(repo => repo.GetStudentByEmailAsync(student.Email))
-                    .ReturnsAsync((Student?)null);
+                    .ReturnsAsync(student);
 
                 _mockStudentRepository
                     .Setup(repo => repo.UpdateStudentAsync(student))
@@ -95,7 +95,7 @@ namespace CourseEnrollmentApp.Application.Tests.Services
 
                 _mockStudentRepository
                     .Setup(repo => repo.GetStudentByEmailAsync(student.Email))
-                    .ReturnsAsync(student);
+                    .ReturnsAsync((Student?)null);
 
                 // Act
                 var result = await _studentService.UpdateStudentAsync(student);
